@@ -61,12 +61,13 @@ dependencies {
     // additional dependencies
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.runtime.livedata) // Or the latest stable/beta version
     // Lifecycle components (LiveData + ViewModel)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     // RecyclerView
     implementation(libs.androidx.recyclerview)
     // Kotlin Coroutines for background operations (Room uses suspend functions)
     implementation(libs.kotlinx.coroutines.android)
-
 }
