@@ -70,4 +70,5 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     // Kotlin Coroutines for background operations (Room uses suspend functions)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.print)
 }
