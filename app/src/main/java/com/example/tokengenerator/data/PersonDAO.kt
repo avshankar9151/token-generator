@@ -15,6 +15,6 @@ interface PersonDao {
     @Delete
     suspend fun delete(person: Person)
 
-    @Query("SELECT * FROM persons ORDER BY name ASC, age ASC")
+    @Query("SELECT * FROM persons ORDER BY name ASC, memberId ASC")
     fun getAllPersons(): LiveData<List<Person>>
 }
