@@ -70,8 +70,8 @@ fun GenerateTokenScreen(modifier: Modifier = Modifier, viewModel: PersonViewMode
                 }
             ) {
                 Column(modifier = modifier.padding(16.dp)) {
-                    Text("Name: ${person.name}", style = MaterialTheme.typography.titleMedium)
-                    Text("Age: ${person.age}", style = MaterialTheme.typography.bodyMedium)
+                    Text("Ref. Name: ${person.name}", style = MaterialTheme.typography.titleMedium)
+                    Text("Member Id: ${person.memberId}", style = MaterialTheme.typography.bodyMedium)
                 }
             }
         }
@@ -91,8 +91,8 @@ fun ShowPopUp(person: Person, onDismiss: () -> Unit) {
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text("Generate Token", style = MaterialTheme.typography.titleLarge)
-                Text("Rf. Person: ${person.name}, ${person.age}", style = MaterialTheme.typography.bodyLarge)
-                Text("Token Sequence: ${person.tokenSequence}", style = MaterialTheme.typography.bodyLarge)
+                Text("Ref. Person: ${person.name}, ${person.memberId}", style = MaterialTheme.typography.bodyLarge)
+                Text("Token Sequence: 1", style = MaterialTheme.typography.bodyLarge)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()

@@ -7,6 +7,5 @@ import androidx.room.PrimaryKey
 data class Person(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val age: Int,
-    val tokenSequence: Int = 1
+    val memberId: String
 )

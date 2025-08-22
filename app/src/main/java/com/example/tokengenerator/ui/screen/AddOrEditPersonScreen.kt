@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -41,7 +40,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -53,9 +51,9 @@ import com.example.tokengenerator.viewmodel.PersonViewModel
 @Composable
 fun AddOrEditPersonScreen(viewModel: PersonViewModel = viewModel()) {
     var name by remember { mutableStateOf("") }
-    var age by remember { mutableStateOf("") }
+    var memberId by remember { mutableStateOf("") }
     var isNameError by remember { mutableStateOf(false) }
-    var isAgeError by remember { mutableStateOf(false) }
+    var isMemberIdError by remember { mutableStateOf(false) }
     val persons by viewModel.allPersons.observeAsState(initial = emptyList())
     var editingPersonId by remember { mutableStateOf<Int?>(null) }
     var isEditing by remember { mutableStateOf(false) }
@@ -83,39 +81,36 @@ fun AddOrEditPersonScreen(viewModel: PersonViewModel = viewModel()) {
 
         )
         OutlinedTextField(
-            value = age,
+            value = memberId,
             onValueChange = {
-                if (it.all { char -> char.isDigit() }) {
-                    age = it
-                    isAgeError = it.isBlank()
-                }
+                memberId = it
+                isMemberIdError = it.isBlank()
             },
-            label = { Text("Age") },
+            label = { Text("Member Id") },
             singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth(),
-            isError = isAgeError,
-            supportingText = { if (isAgeError) Text("Age is required") })
+            isError = isMemberIdError,
+            supportingText = { if (isMemberIdError) Text("Age is required") })
         Button(
             onClick = {
-                if (name.isNotBlank() && age.isNotBlank()) {
+                if (name.isNotBlank() && memberId.isNotBlank()) {
                     println("saving")
                     if (isEditing) {
                         editingPersonId?.let {
-                            viewModel.update(Person(id = it, name = name, age = age.toInt()))
+                            viewModel.update(Person(id = it, name = name, memberId = memberId))
                         }
                         editingPersonId = null
                         isEditing = false
                     } else {
-                        viewModel.insert(Person(name = name, age = age.toInt()))
+                        viewModel.insert(Person(name = name, memberId = memberId))
                     }
                     println("saved")
                     name = ""
-                    age = ""
+                    memberId = ""
                     isNameError = false
-                    isAgeError = false
+                    isMemberIdError = false
                 } else {
-                    isAgeError = age.isBlank()
+                    isMemberIdError = memberId.isBlank()
                     isNameError = name.isBlank()
                 }
             }, modifier = Modifier.fillMaxWidth()
@@ -133,12 +128,12 @@ fun AddOrEditPersonScreen(viewModel: PersonViewModel = viewModel()) {
                 PersonCard(
                     person = person, onUpdate = {
                     name = person.name
-                    age = person.age.toString()
+                    memberId = person.memberId
                     isEditing = true
                     editingPersonId = person.id
                 }, onRemove = {
                     name = ""
-                    age = ""
+                    memberId = ""
                     editingPersonId = null
                     isEditing = false
                     viewModel.delete(person)
@@ -217,8 +212,8 @@ fun PersonCard(
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
             Column(modifier = modifier.padding(16.dp)) {
-                Text("Name: ${person.name}", style = MaterialTheme.typography.titleMedium)
-                Text("Age: ${person.age}", style = MaterialTheme.typography.bodyMedium)
+                Text("Ref. Name: ${person.name}", style = MaterialTheme.typography.titleMedium)
+                Text("Member Id: ${person.memberId}", style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
