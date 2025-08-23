@@ -20,6 +20,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.livedata.observeAsState
@@ -35,10 +37,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tokengenerator.data.Person
+import com.example.tokengenerator.data.Token
 import com.example.tokengenerator.viewmodel.PersonViewModel
 import kotlinx.coroutines.launch
 import com.example.tokengenerator.doPhotoPrint
 import com.example.tokengenerator.generateBitmapsForPrinting
+import com.example.tokengenerator.viewmodel.TokenViewModel
+import kotlin.collections.mutableListOf
 
 @Composable
 fun GenerateTokenScreen(modifier: Modifier = Modifier, viewModel: PersonViewModel = viewModel()) {
@@ -81,7 +86,9 @@ fun GenerateTokenScreen(modifier: Modifier = Modifier, viewModel: PersonViewMode
 @Composable
 fun ShowPopUp(person: Person, onDismiss: () -> Unit) {
     var count by remember { mutableIntStateOf(1) }
+    var isGenerateAndPrintClicked by remember { mutableStateOf(false) }
     val context = LocalContext.current
+
     Dialog(onDismissRequest = onDismiss) {
         Card(
             modifier = Modifier
@@ -91,8 +98,8 @@ fun ShowPopUp(person: Person, onDismiss: () -> Unit) {
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text("Generate Token", style = MaterialTheme.typography.titleLarge)
-                Text("Ref. Person: ${person.name}, ${person.memberId}", style = MaterialTheme.typography.bodyLarge)
-                Text("Token Sequence: 1", style = MaterialTheme.typography.bodyLarge)
+                Text("Ref. Person: ${person.name}", style = MaterialTheme.typography.bodyLarge)
+                Text("M. Id: ${person.memberId}", style = MaterialTheme.typography.bodyLarge)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -118,9 +125,10 @@ fun ShowPopUp(person: Person, onDismiss: () -> Unit) {
                 Button(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
-                        generateTokenAndPrint(context, person = person, count = count, onDismiss = {
-                            onDismiss()
-                        })
+                        isGenerateAndPrintClicked = true
+//                        generateTokenAndPrint(context, person = person, count = count, onDismiss = {
+//                            onDismiss()
+//                        })
                     }
                 ) {
                     Text("Generate & Print")
@@ -128,13 +136,36 @@ fun ShowPopUp(person: Person, onDismiss: () -> Unit) {
             }
         }
     }
+    if (isGenerateAndPrintClicked) {
+        GenerateTokens(context, person, count, onDismiss)
+    }
 }
 
-fun generateTokenAndPrint(context: Context, person: Person, count: Int, onDismiss: () -> Unit) {
+@Composable
+fun GenerateTokens(context: Context, person: Person, count: Int, onDismiss: () -> Unit, tokenViewModel: TokenViewModel = viewModel()) {
+    val addedTokens by tokenViewModel.newlyAddedTokens.collectAsState()
+    val tokens = remember { mutableListOf<Token>() }
+    for (i in 1..count) {
+        val token = Token(personId = person.id, noOfPerson = count)
+        tokens.add(token)
+    }
+    LaunchedEffect(Unit) {
+        tokenViewModel.insertAll(tokens)
+    }
+
+    if (addedTokens.isNotEmpty()) {
+        Log.d("GenerateTokens", "tokens: $tokens")
+        Log.d("GenerateTokens", "Newly inserted tokens: $addedTokens")
+        generateTokenAndPrint(context, person, addedTokens, onDismiss)
+        tokenViewModel.clearNewlyAddedTokens()
+        tokens.clear()
+    }
+}
+
+fun generateTokenAndPrint(context: Context, person: Person, tokens: List<Token>, onDismiss: () -> Unit) {
     (context as ComponentActivity).lifecycleScope.launch {
-        val bitmaps = generateBitmapsForPrinting(context, person, count)
+        val bitmaps = generateBitmapsForPrinting(context, person, tokens)
         Log.d("PrintToken", "Printing bitmaps ${bitmaps.count()}")
-        doPhotoPrint(context, bitmaps)
-        onDismiss()
+        doPhotoPrint(context, bitmaps, onDismiss)
     }
 }

@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.createBitmap
 import com.example.tokengenerator.data.Person
+import com.example.tokengenerator.data.Token
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withContext
@@ -134,7 +135,7 @@ class MultiPageBitmapAdapter(private val bitmaps: List<Bitmap>, private val docu
     }
 }
 
-fun doPhotoPrint(context: Context, bitmaps: List<Bitmap>) {
+fun doPhotoPrint(context: Context, bitmaps: List<Bitmap>, onDissMiss: () -> Unit) {
     val jobName = "TokenPrintJob"
     val printManager = ContextCompat.getSystemService(context, PrintManager::class.java) as PrintManager
     val adapter = MultiPageBitmapAdapter(bitmaps, jobName)
@@ -144,6 +145,7 @@ fun doPhotoPrint(context: Context, bitmaps: List<Bitmap>) {
         .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
         .build()
     printManager.print(jobName, adapter, printAttributes)
+    onDissMiss()
 }
 
 suspend fun renderComposableToBitmap(activity: Activity, width: Int, height: Int, content: @Composable () -> Unit): Bitmap {
@@ -199,14 +201,14 @@ suspend fun renderComposableToBitmap(activity: Activity, width: Int, height: Int
     }
 }
 
-suspend fun generateBitmapsForPrinting(context: Context, person: Person, count: Int): List<Bitmap> {
+suspend fun generateBitmapsForPrinting(context: Context, person: Person, tokens: List<Token>): List<Bitmap> {
     val bitmaps = mutableListOf<Bitmap>()
 
     // Using withContext(Dispatchers.IO) to perform heavy data processing
     withContext(Dispatchers.IO) {
         var tokenNumber = 1
 
-        for (i in 1..count) {
+        for (token in tokens) {
 //            withContext(Dispatchers.Main) {
 //                Toast.makeText(context, "Generating bitmap for token $tokenNumber", Toast.LENGTH_SHORT).show()
 //            }
@@ -214,7 +216,7 @@ suspend fun generateBitmapsForPrinting(context: Context, person: Person, count: 
             // Now, switch to the main thread to render the Composable and capture the image
             val bitmap = renderComposableToBitmap(context as Activity, 900, 1300) {
                 // The Composable content to be rendered
-                TokenUI(person = person, tokenNumber = tokenNumber, count = count)
+                TokenUI(person = person, token = token)
             }
             tokenNumber++
             bitmaps.add(bitmap)
@@ -225,10 +227,10 @@ suspend fun generateBitmapsForPrinting(context: Context, person: Person, count: 
 
 @SuppressLint("SimpleDateFormat")
 @Composable
-fun TokenUI(person: Person, tokenNumber: Int, count: Int, modifier: Modifier = Modifier) {
-    val currentDateTime = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date())
-
-
+fun TokenUI(person: Person, token: Token, modifier: Modifier = Modifier) {
+    // Correctly format the issuedOn date
+    val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
+    val formattedIssuedOn = dateFormat.format(token.issuedOn)
 
     Column(
         modifier = modifier
@@ -248,17 +250,17 @@ fun TokenUI(person: Person, tokenNumber: Int, count: Int, modifier: Modifier = M
 
         Text("Ref. Name: ${person.name}", style = MaterialTheme.typography.bodyLarge, fontSize = 18.sp)
         Text("M. Id: ${person.memberId}", style = MaterialTheme.typography.bodyLarge, fontSize = 18.sp)
-        Text("No. of Person: $count", style = MaterialTheme.typography.bodyLarge, fontSize = 18.sp)
+        Text("No. of Person: ${token.noOfPerson}", style = MaterialTheme.typography.bodyLarge, fontSize = 18.sp)
         Spacer(modifier = Modifier.padding(8.dp))
 
         Text("Token No:", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), fontSize = 20.sp)
-        Text("$tokenNumber", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), fontSize = 36.sp)
+        Text("${token.id}", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), fontSize = 36.sp)
 
         Spacer(modifier = Modifier.padding(6.dp))
 
 
         Text("--------------------------------", fontSize = 16.sp) // Separator
-        Text("Issued: $currentDateTime", style = MaterialTheme.typography.bodySmall, fontSize = 12.sp)
+        Text("Issued: $formattedIssuedOn", style = MaterialTheme.typography.bodySmall, fontSize = 12.sp)
 
         Spacer(modifier = Modifier.padding(8.dp))
         Text("Thank You!", style = MaterialTheme.typography.bodyMedium, fontSize = 16.sp)
@@ -274,7 +276,7 @@ fun TokenUIPreview() {
     MaterialTheme {
         TokenUI(
             person = Person(id = 1, name = "John Doe", memberId = "MEI10001"),
-            tokenNumber = 101,
-            count = 2)
+            token = Token(id = 1, personId = 1, issuedOn = Date(), noOfPerson = 2) // Example Token
+        )
     }
 }
