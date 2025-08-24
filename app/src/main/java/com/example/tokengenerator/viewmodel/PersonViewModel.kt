@@ -37,4 +37,8 @@ class PersonViewModel(application: Application) : AndroidViewModel(application) 
             repository.delete(person)
         }
     }
+
+    suspend fun get(personId: Long): Person {
+        return repository.get(personId)
+    }
 }

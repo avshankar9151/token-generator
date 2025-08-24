@@ -17,4 +17,7 @@ interface PersonDao {
 
     @Query("SELECT * FROM persons ORDER BY name ASC, memberId ASC")
     fun getAllPersons(): LiveData<List<Person>>
+
+    @Query("SELECT * FROM persons WHERE id = :personId")
+    fun get(personId: Long): Person
 }
