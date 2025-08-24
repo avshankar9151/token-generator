@@ -32,7 +32,7 @@ jobs:
       - name: Build Unsigned Release APK
         run: ./gradlew assembleRelease
 
-      # Step 4: Upload the renamed APK as a workflow artifact
+      # Step 2: Upload the unsigned APK as a workflow artifact
       - name: Upload Unsigned Release APK
         uses: actions/upload-artifact@v4
         with:
