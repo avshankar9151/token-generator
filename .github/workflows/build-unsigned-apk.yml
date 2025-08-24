@@ -22,7 +22,7 @@ jobs:
           java-version: '17'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v1
+        uses: android-actions/setup-android@v3.2.2
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
