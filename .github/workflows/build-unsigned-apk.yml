@@ -1,4 +1,4 @@
-name: Build Unsigned Release APK
+name: Build Unsigned Debug APK
 
 on:
   push:
@@ -30,11 +30,12 @@ jobs:
 
       # Step 1: Build the unsigned release APK
       - name: Build Unsigned Release APK
-        run: ./gradlew assembleRelease
+        # run: ./gradlew assembleRelease
+        run: ./gradlew assembleDebug
 
       # Step 2: Upload the unsigned APK as a workflow artifact
       - name: Upload Unsigned Release APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release-v${{ env.VERSION_NAME }}
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
