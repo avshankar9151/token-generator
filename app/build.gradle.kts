@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.tokengenerator"
-        minSdk = 21
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -71,4 +71,13 @@ dependencies {
     // Kotlin Coroutines for background operations (Room uses suspend functions)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.print)
+    // Apache POI for .xls and .xlsx file handling
+    implementation(libs.poi) // Use a recent version
+    implementation(libs.poi.ooxml) // Use a recent version
+
+    // To avoid issues with some older versions
+    // If you encounter an error, you might also need this:
+    implementation(libs.commons.io)
+    // This is the dependency you need for the "Download" icon
+    implementation(libs.androidx.material.icons.extended)
 }
