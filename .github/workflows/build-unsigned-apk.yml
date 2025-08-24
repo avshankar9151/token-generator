@@ -22,7 +22,8 @@ jobs:
           java-version: '17'
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3.2.2
+        uses: android-actions/setup-android@v3
+        # https://github.com/marketplace/actions/setup-android-sdk-tools
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
