@@ -240,30 +240,30 @@ fun TokenUI(person: Person, token: Token, modifier: Modifier = Modifier) {
     ) {
         Image(painterResource(R.drawable.rp_tm_logo_read), "Store Logo", modifier = modifier
             .width(120.dp))
-        Spacer(modifier = Modifier.padding(6.dp))
+        Spacer(modifier = Modifier.padding(2.dp))
 
-        Text("Visitor Pass", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold), fontSize = 20.sp)
+        Text("Visitor Pass", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold), fontSize = 16.sp)
+        Spacer(modifier = Modifier.padding(2.dp))
+
+        Text("--------------------------------", fontSize = 10.sp) // Separator
+        Spacer(modifier = Modifier.padding(2.dp))
+
+        Text("Ref. Name: ${person.name}", style = MaterialTheme.typography.bodyMedium, fontSize = 10.sp)
+        Text("M. Id: ${person.memberId}", style = MaterialTheme.typography.bodyMedium, fontSize = 10.sp)
+        Text("No. of Person: ${token.noOfPerson}", style = MaterialTheme.typography.bodyMedium, fontSize = 10.sp)
+        Spacer(modifier = Modifier.padding(2.dp))
+
+        Text("Token No:", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), fontSize = 12.sp)
+        Text("${token.id}", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), fontSize = 15.sp)
+
+        Spacer(modifier = Modifier.padding(2.dp))
+
+
+        Text("--------------------------------", fontSize = 10.sp) // Separator
+        Text("Issued: $formattedIssuedOn", style = MaterialTheme.typography.bodySmall, fontSize = 10.sp)
+
         Spacer(modifier = Modifier.padding(4.dp))
-
-        Text("--------------------------------", fontSize = 16.sp) // Separator
-        Spacer(modifier = Modifier.padding(4.dp))
-
-        Text("Ref. Name: ${person.name}", style = MaterialTheme.typography.bodyLarge, fontSize = 18.sp)
-        Text("M. Id: ${person.memberId}", style = MaterialTheme.typography.bodyLarge, fontSize = 18.sp)
-        Text("No. of Person: ${token.noOfPerson}", style = MaterialTheme.typography.bodyLarge, fontSize = 18.sp)
-        Spacer(modifier = Modifier.padding(8.dp))
-
-        Text("Token No:", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), fontSize = 20.sp)
-        Text("${token.id}", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), fontSize = 36.sp)
-
-        Spacer(modifier = Modifier.padding(6.dp))
-
-
-        Text("--------------------------------", fontSize = 16.sp) // Separator
-        Text("Issued: $formattedIssuedOn", style = MaterialTheme.typography.bodySmall, fontSize = 12.sp)
-
-        Spacer(modifier = Modifier.padding(8.dp))
-        Text("Thank You!", style = MaterialTheme.typography.bodyMedium, fontSize = 16.sp)
+        Text("Thank You!", style = MaterialTheme.typography.bodyMedium, fontSize = 12.sp)
 
 
     }
