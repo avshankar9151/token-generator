@@ -28,26 +28,13 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      # Step 1: Read the versionName from build.gradle
-      # This command extracts the versionName value
-      - name: Get Version Name
-        id: get_version
-        run: |
-          VERSION_NAME=$(grep "versionName" app/build.gradle | cut -d '"' -f 2)
-          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_ENV
-
-      # Step 2: Build the unsigned release APK
+      # Step 1: Build the unsigned release APK
       - name: Build Unsigned Release APK
         run: ./gradlew assembleRelease
-
-      # Step 3: Rename the APK to include the version name
-      - name: Rename APK
-        run: |
-          mv app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-${{ env.VERSION_NAME }}-release-unsigned.apk
 
       # Step 4: Upload the renamed APK as a workflow artifact
       - name: Upload Unsigned Release APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release-v${{ env.VERSION_NAME }}
-          path: app/build/outputs/apk/release/app-${{ env.VERSION_NAME }}-release-unsigned.apk
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
