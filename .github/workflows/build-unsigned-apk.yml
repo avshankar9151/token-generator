@@ -28,8 +28,8 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
-      # Step 1: Build the unsigned release APK
-      - name: Build Unsigned Release APK
+      # Step 1: Build the unsigned debug APK
+      - name: Build Unsigned Debug APK
         # run: ./gradlew assembleRelease
         run: ./gradlew assembleDebug
 
