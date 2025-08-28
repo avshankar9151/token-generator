@@ -141,7 +141,7 @@ fun doPhotoPrint(context: Context, bitmaps: List<Bitmap>, onDissMiss: () -> Unit
     val adapter = MultiPageBitmapAdapter(bitmaps, jobName)
     val printAttributes = PrintAttributes.Builder()
         .setMediaSize(PrintAttributes.MediaSize.ISO_A7)
-        .setResolution(PrintAttributes.Resolution("res1","100x100", 100, 100))
+        .setResolution(PrintAttributes.Resolution("res1","200x200", 200, 200))
         .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
         .build()
     printManager.print(jobName, adapter, printAttributes)
@@ -239,31 +239,31 @@ fun TokenUI(person: Person, token: Token, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(painterResource(R.drawable.rp_tm_logo_read), "Store Logo", modifier = modifier
-            .width(120.dp))
+            .width(150.dp))
         Spacer(modifier = Modifier.padding(2.dp))
 
-        Text("Visitor Pass", style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold), fontSize = 16.sp)
+        Text("Visitor Pass", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), fontSize = 20.sp)
         Spacer(modifier = Modifier.padding(2.dp))
 
-        Text("--------------------------------", fontSize = 10.sp) // Separator
+        Text("--------------------------------", fontSize = 13.sp) // Separator
         Spacer(modifier = Modifier.padding(2.dp))
 
-        Text("Ref. Name: ${person.name}", style = MaterialTheme.typography.bodyMedium, fontSize = 10.sp)
-        Text("M. Id: ${person.memberId}", style = MaterialTheme.typography.bodyMedium, fontSize = 10.sp)
-        Text("No. of Person: ${token.noOfPerson}", style = MaterialTheme.typography.bodyMedium, fontSize = 10.sp)
+        Text("Ref. Name: ${person.name}", style = MaterialTheme.typography.bodyMedium, fontSize = 14.sp)
+        Text("M. Id: ${person.memberId}", style = MaterialTheme.typography.bodyMedium, fontSize = 14.sp)
+        Text("No. of Person: ${token.noOfPerson}", style = MaterialTheme.typography.bodyMedium, fontSize = 14.sp)
         Spacer(modifier = Modifier.padding(2.dp))
 
-        Text("Token No:", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), fontSize = 12.sp)
-        Text("${token.id}", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), fontSize = 15.sp)
+        Text("Token No:", style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold), fontSize = 16.sp)
+        Text("${token.id}", style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold), fontSize = 18.sp)
 
         Spacer(modifier = Modifier.padding(2.dp))
 
 
-        Text("--------------------------------", fontSize = 10.sp) // Separator
-        Text("Issued: $formattedIssuedOn", style = MaterialTheme.typography.bodySmall, fontSize = 10.sp)
+        Text("--------------------------------", fontSize = 13.sp) // Separator
+        Text("Issued: $formattedIssuedOn", style = MaterialTheme.typography.bodySmall, fontSize = 13.sp)
 
-        Spacer(modifier = Modifier.padding(4.dp))
-        Text("Thank You!", style = MaterialTheme.typography.bodyMedium, fontSize = 12.sp)
+        Spacer(modifier = Modifier.padding(6.dp))
+        Text("Thank You!", style = MaterialTheme.typography.bodyMedium, fontSize = 18.sp)
 
 
     }
